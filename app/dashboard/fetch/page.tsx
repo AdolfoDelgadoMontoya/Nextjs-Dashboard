@@ -35,7 +35,7 @@ export default async function Page() {
                     <Suspense fallback={<CardsSkeleton />}>
 
                         {/*Cartas con texto*/}
-                        {stringsSource.map((stringSource) => {
+                        {stringsSource.map((stringSource, index) => {
                             const IconTxtCard = stringSource.icon;
                             return (
                                 <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
