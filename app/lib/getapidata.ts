@@ -1,7 +1,7 @@
 export async function GetApiData(typeDog: string) {
-    const randomName = Math.floor(Math.random() * 10) + 1;
+    const randomName = Math.floor(Math.random() * 11);
     const nNombre = randomName.toString();
-    const randomAdvice = Math.floor(Math.random() * 10) + 1;
+    const randomAdvice = Math.floor(Math.random() * 224) + 1;
     const nAdvice = randomAdvice.toString();
     const [res1, res2, res3] = await Promise.all([
         fetch(`https://jsonplaceholder.typicode.com/users/${nNombre}`),
