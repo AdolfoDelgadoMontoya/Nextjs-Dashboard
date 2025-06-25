@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import {
     UserIcon,
     ExclamationCircleIcon,
-    PencilSquareIcon,
     HeartIcon,
 } from '@heroicons/react/24/outline';
 import {
@@ -18,14 +17,37 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-    const data = await GetApiData();
-    const stringsSource = [
-        { title: "Lista de nombres", icon: UserIcon, stringValue: data.props.data?.users.name, alterString: "Sin conexión" },
-        { title: "Consejo al azar", icon: ExclamationCircleIcon, stringValue: data.props.data?.advice.slip.advice, alterString: "Sin conexión" },
-        { title: "Actividad al azar", icon: PencilSquareIcon, stringValue: data.props.data?.activity.activity, alterString: "Sin conexión" },
+    const data1 = await GetApiData("akita");
+    const data2 = await GetApiData("african");
+    const data3 = await GetApiData("boxer");
+    const data4 = await GetApiData("basenji");
+
+    const sources = [
+        {
+            stringValueRow1: data1.props.data?.users.name,
+            stringValueRow2: data1.props.data?.advice.slip.advice,
+            imgValueRow3: data1.props.data?.image.message
+        },
+        {
+            stringValueRow1: data2.props.data?.users.name,
+            stringValueRow2: data2.props.data?.advice.slip.advice,
+            imgValueRow3: data2.props.data?.image.message
+        },
+        {
+            stringValueRow1: data3.props.data?.users.name,
+            stringValueRow2: data3.props.data?.advice.slip.advice,
+            imgValueRow3: data3.props.data?.image.message
+        },
+        {
+            stringValueRow1: data4.props.data?.users.name,
+            stringValueRow2: data4.props.data?.advice.slip.advice,
+            imgValueRow3: data4.props.data?.image.message
+        },
     ];
-    const imageSource = { title: "Perro al azar", source: data.props.data?.image.message, icon: HeartIcon, alt:"Sin conexión"};
-    const ImageIcon = imageSource.icon;
+
+    const NamesIcon =  UserIcon;
+    const AdviceIcon = ExclamationCircleIcon;
+    const DogsIcon = HeartIcon;
     return (
         <div>
             <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -36,39 +58,53 @@ export default async function Page() {
                     <Suspense fallback={<CardsSkeleton />}>
 
                         {/*Cartas con texto*/}
-                        {stringsSource.map((stringSource, index) => {
-                            const IconTxtCard = stringSource.icon;
+                        {sources.map((source, index) => {
                             return (
-                                <div className="rounded-xl bg-gray-50 p-2 shadow-sm" key={index}>
-                                    <div className="flex p-4">
-                                        <IconTxtCard className="h-5 w-5 text-gray-700" />
-                                        <h3 className="ml-2 text-sm font-medium">{stringSource.title}</h3>
+                                <div key={index}>
+                                    {/*Cartas con nombres*/}
+                                    <div className="rounded-xl bg-gray-300 p-2 shadow-sm">
+                                        <div className="flex p-4">
+                                            <NamesIcon className="h-5 w-5 text-gray-700" />
+                                            <h3 className="ml-2 text-sm font-medium">Lista de nombres</h3>
+                                        </div>
+                                        <p
+                                            className={`${lusitana.className}
+                                        rounded-xl bg-white px-4 py-8 text-justify text-2xl`}
+                                        >
+                                            {source.stringValueRow1 || "Not found"}
+                                        </p>
                                     </div>
-                                    <p
-                                        className={`${lusitana.className}
-                                truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
-                                    >
-                                        {stringSource.stringValue || stringSource.alterString}
-                                    </p>
+                                    {/*Cartas con consejos*/}
+                                    <div className="rounded-xl bg-gray-300 p-2 shadow-sm">
+                                        <div className="flex p-4">
+                                            <AdviceIcon className="h-5 w-5 text-gray-700" />
+                                            <h3 className="ml-2 text-sm font-medium">Consejo al azar</h3>
+                                        </div>
+                                        <p
+                                            className={`${lusitana.className}
+                                        rounded-xl bg-white px-4 py-8 text-justify text-2xl`}
+                                        >
+                                            {source.stringValueRow2 || "Not found"}
+                                        </p>
+                                    </div>
+                                    {/*Cartas con perros*/}
+                                    <div className="rounded-xl bg-gray-300 p-2 shadow-sm">
+                                        <div className="flex p-4">
+                                            <DogsIcon className="h-5 w-5 text-gray-700" />
+                                            <h3 className="ml-2 text-sm font-medium">Perros al azar</h3>
+                                        </div>
+                                        <p
+                                            className={`${lusitana.className}
+                              truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
+                                        >
+                                            {source.imgValueRow3 ? (
+                                                <Image src={source.imgValueRow3} width={100} height={100} alt={"Dog img"+index} />
+                                            ) : (<p>{"Dog img"+index}</p>)}
+                                        </p>
+                                    </div>
                                 </div>
                             );
                         })}
-
-                        {/*Carta con imagen*/}
-                        <div className="rounded-xl bg-gray-50 p-2 shadow-sm">
-                            <div className="flex p-4">
-                                <ImageIcon className="h-5 w-5 text-gray-700" />
-                                <h3 className="ml-2 text-sm font-medium">{imageSource.title}</h3>
-                            </div>
-                            <p
-                                className={`${lusitana.className}
-                              truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
-                            >
-                                {imageSource.source ?(
-                                <Image src={imageSource.source} width={100} height={100} alt={imageSource.alt} />
-                                ) : (<p>{imageSource.alt}</p>)}
-                            </p>
-                        </div>
                     </Suspense>
                 </div>
             </div>
