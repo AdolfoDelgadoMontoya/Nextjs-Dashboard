@@ -1,8 +1,5 @@
-export async function GetApiData(typeDog: string) {
-    const randomName = Math.floor(Math.random() * 11);
-    const nNombre = randomName.toString();
-    const randomAdvice = Math.floor(Math.random() * 224) + 1;
-    const nAdvice = randomAdvice.toString();
+export async function GetApiData(nNombre:number, nAdvice:number, typeDog: string) {
+    try{
     const [res1, res2, res3] = await Promise.all([
         fetch(`https://jsonplaceholder.typicode.com/users/${nNombre}`),
         fetch(`https://api.adviceslip.com/advice/${nAdvice}`),
@@ -25,4 +22,13 @@ export async function GetApiData(typeDog: string) {
         },
         revalidate: 60, // ISR: revalida cada 60 segundos
     };
+    } catch (error) {
+        console.error("Error fetching data:", error);
+        return {
+            props: {
+                data: null,
+                error: error,
+            },
+        };
+    }
 }

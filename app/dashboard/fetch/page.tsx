@@ -11,16 +11,24 @@ import {
 import { Metadata } from 'next';
 import Image from 'next/image'
 import { GetApiData } from '@/app/lib/getapidata';
+import { string } from "zod";
 
 export const metadata: Metadata = {
     title: 'APIS',
 };
 
 export default async function Page() {
-    const data1 = await GetApiData("akita");
-    const data2 = await GetApiData("african");
-    const data3 = await GetApiData("boxer");
-    const data4 = await GetApiData("basenji");
+    const randomName = (): number => {
+        return Math.floor(Math.random() * 11); // Rango de 0 a 10
+    };
+    const randomAdvice = (): number => {
+        return Math.floor(Math.random() * 224) + 1; // Rango de 1 a 224
+    };
+
+    const data1 = await GetApiData(randomName(), randomAdvice(), "akita");
+    const data2 = await GetApiData(randomName(), randomAdvice(), "african");
+    const data3 = await GetApiData(randomName(), randomAdvice(), "boxer");
+    const data4 = await GetApiData(randomName(), randomAdvice(), "basenji");
 
     const sources = [
         {
@@ -45,7 +53,14 @@ export default async function Page() {
         },
     ];
 
-    const NamesIcon =  UserIcon;
+    if (data1.props.data == null || data2.props.data == null || data3.props.data == null || data4.props.data == null) {
+        console.error(data1.props.error);
+        console.error(data2.props.error);
+        console.error(data3.props.error);
+        console.error(data4.props.error);
+    }
+
+    const NamesIcon = UserIcon;
     const AdviceIcon = ExclamationCircleIcon;
     const DogsIcon = HeartIcon;
     return (
@@ -98,8 +113,8 @@ export default async function Page() {
                               truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
                                         >
                                             {source.imgValueRow3 ? (
-                                                <Image src={source.imgValueRow3} width={100} height={100} alt={"Dog img"+index} />
-                                            ) : (<p>{"Dog img"+index}</p>)}
+                                                <Image src={source.imgValueRow3} width={100} height={100} alt={"Dog img" + index} />
+                                            ) : (<p>{"Dog img " + (index + 1)}</p>)}
                                         </p>
                                     </div>
                                 </div>
